@@ -1,11 +1,15 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -g
-OBJECTS = stack.o
+OBJECTS = queue.o
 
 .PHONY	:	all	clean
 
-all	:	stack
+all	:	testing
+testing	:	$(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o testing
 stack.o	:	stack.c
 	$(CC) $(CFLAGS) -c stack.c
+queue.o	:	queue.c
+	$(CC) $(CFLAGS) -c queue.c
 clean	:
-	rm -f $(OBJECTS) stack
+	rm -f $(OBJECTS) testing
