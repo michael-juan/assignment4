@@ -3,6 +3,7 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <stdbool.h>
+# include "code.h"
 
 # ifndef NIL
 # define NIL ( void *) 0
@@ -19,19 +20,26 @@ struct DAH
 };
 
 // New node , with symbols , leaf or not , a count associated with it
-static inline treeNode * newNode ( uint8_t s, bool l, uint64_t c);
-// {
-// 	treeNode *newNode = malloc(sizeof(treeNode));
-// }
+static inline treeNode * newNode( uint8_t s, bool l, uint64_t c)
+{
+	treeNode *newNode = malloc(sizeof(treeNode));
+	treeNode -> symbol = s;
+	treeNode -> leaf = l;
+	treeNode -> count = c;
+	treeNode -> left = NIL;
+	treeNode -> right = NIL;
+	return newNode;
+}
+
 
 // Dump a Huffman tree onto a file
-void dumpTree (treeNode *t, int file);
+void dumpTree(treeNode *t, int file);
 
 // Build a tree from the saved tree
-treeNode * loadTree (uint8_t savedTree[], uint16_t treeBytes);
+treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
 
 // Step through a tree following the code
-int32_t stepTree (treeNode *root, treeNode **t, uint32_t code);
+int32_t stepTree(treeNode *root, treeNode **t, uint32_t code);
 
 // Parse a Huffman tree to build codes
 void buildCode (treeNode *t, code s, code table [256]);
@@ -39,7 +47,6 @@ void buildCode (treeNode *t, code s, code table [256]);
 // Delete a tree
 static inline void * delTree (treeNode *t)
 {
-	free (t);
 	return;
 }
 
@@ -50,7 +57,7 @@ static inline void delNode(treeNode *h)
 }
 static inline int8_t compare (treeNode *l, treeNode *r)
 {
-	return l- > count - r- > count; // l < r if negative , l = r if 0 , ...
+	return l-> count - r-> count; // l < r if negative , l = r if 0 , ...
 }
 
 treeNode * join (treeNode *l, treeNode *r); // Join two subtrees
