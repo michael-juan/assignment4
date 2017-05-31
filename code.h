@@ -1,7 +1,7 @@
 # ifndef _CODE_H
 # define _CODE_H
-# include < stdint .h >
-# include < stdbool .h >
+# include <stdint.h>
+# include <stdbool.h>
 typedef struct code
 {
 	uint8_t bits [32];
@@ -10,7 +10,7 @@ typedef struct code
 static inline code newCode ()
 {
 	code t ;
-	for ( int i = 0; i < 32; i += 1)
+	for (int i = 0; i < 32; i += 1)
 	{
 		t.bits[i] = 0;
 	}
@@ -44,7 +44,7 @@ static inline bool popCode ( code *c, uint32_t * k )
 	else
 	{
 		c - > l -= 1;
-		*k = ((0 x1 << (c - > l % 8) ) & c - > bits [c - > l / 8]) >> (c - > l % 8);
+		*k = ((0 x1 << (c - > l % 8)) & c - > bits [c - > l / 8]) >> (c - > l % 8);
 		return true;
 	}
 }
