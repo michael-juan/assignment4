@@ -65,6 +65,7 @@ void printStack(stack *s)
 	}
 	printf("\n");
 }
+/*
 int main()
 {
 	stack *s = newStack();
@@ -84,3 +85,4 @@ int main()
 	printStack(s);
 	delStack(s);
 }
+*/
