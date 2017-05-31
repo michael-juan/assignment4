@@ -62,6 +62,7 @@ void printQueue(queue *q)
 
 int main(void)
 {
+	printf("hi");
 	queue *q = newQueue(5);
 	enqueue(q, 3);
 	enqueue(q, 4);
