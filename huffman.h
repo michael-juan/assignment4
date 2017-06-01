@@ -49,7 +49,7 @@ static inline int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 }
 
 // Parse a Huffman tree to build codes
-void buildCode (treeNode *t, code s, code table[256])
+void buildCode(treeNode *t, code s, code table[256])
 {
 	table[0] = 1;
 	table[255] = 1;
