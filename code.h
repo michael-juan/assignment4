@@ -9,7 +9,7 @@ typedef struct code
 } code;
 static inline code newCode ()
 {
-	code t ;
+	code t;
 	for (int i = 0; i < 32; i += 1)
 	{
 		t.bits[i] = 0;
