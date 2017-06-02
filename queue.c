@@ -38,7 +38,7 @@ bool empty(queue *q)
 }
 
 bool full(queue *q)
-{
+{	
 	if (q -> head == q -> size)
 	{
 		return true;
@@ -63,9 +63,9 @@ bool enqueue(queue *q, item i)
 	{
 		return false;
 	}
-	q -> Q[q -> head] = i;
 	uint32_t tracker = (q -> head);
-
+	
+	q -> Q[q -> head] = i;	
 	if (q -> head > 0)
 	{
 		for (uint32_t i = tracker; i > (q -> tail); i--)
@@ -84,33 +84,36 @@ bool enqueue(queue *q, item i)
 }
 
 void printQueue(queue *q)
-{
-	for (uint32_t i = 0; i < q -> head; i++)
+{		
+	for (uint32_t i = q -> tail; i < q -> head; i++)
 	{
 		printf("%u\t", q -> Q[i]);
 	}
 	printf("\n");
-	return;
 }
-
+/*
 int main(void)
 {
-	queue *q = newQueue(10);
-	//uint32_t *a = 500;
+	queue *q = newQueue(20);
+	uint32_t a = 500;
 	enqueue(q, 3);
 	enqueue(q, 5);
 	enqueue(q, 4);
 	enqueue(q, 8);
 	enqueue(q, 2);
-	//dequeue(q, a);
+	dequeue(q, &a);
 	enqueue(q, 1);
 	enqueue(q, 50);
 	enqueue(q, 49);
+	dequeue(q, &a);
 	enqueue(q, 9);
-	enqueue(q, 6);
+	enqueue(q, 11);
+	enqueue(q, 17);
+	enqueue(q, 22);
+	dequeue(q, &a);
 	printQueue(q);
 	delQueue(q);
 	return 0;
 }
-
+*/
 /* Help from Art on 5/30/17 */
