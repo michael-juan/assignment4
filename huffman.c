@@ -1,6 +1,9 @@
 # include <stdint.h>
 # include <stdio.h>
+
 # include <unistd.h>
+#include <sys/stat.h>
+
 # include <fcntl.h>
 # include <ctype.h>
 # include "huffman.h"
@@ -11,13 +14,13 @@
 
 treeNode * newNode( uint8_t s, bool l, uint64_t c)
 {
-	treeNode *newNode = malloc(sizeof(treeNode));
-	newNode->symbol = s;
-	newNode->leaf = l;
-	newNode->count = c;
-	newNode->left = NIL;
-	newNode->right = NIL;
-	return newNode;
+	treeNode *node = malloc(sizeof(treeNode));
+	node->symbol = s;
+	node->leaf = l;
+	node->count = c;
+	node->left = NIL;
+	node->right = NIL;
+	return node;
 }	
 void *delTree(treeNode *t)
 {
@@ -34,7 +37,10 @@ void dumpTree(treeNode *t, int file)
 	//file = open("",O_CREAT | O_TRUNC | O_WRONLY,0644);
 	
 	//close(file);
-	 write( file,"test",4);
+	struct stat fileStat;
+	uint64_t sFileSize; 
+	write( file,"\xde\xad\xd0\x0d",4);	// writes magic number
+	
 	return;
 }
 // writes representaition of tree to file
@@ -48,16 +54,6 @@ int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 	//return if could stepTree
 	return -1;
 }
-treeNode * newNode( uint8_t s, bool l, uint64_t c)
-{
-	treeNode *newNode = malloc(sizeof(treeNode));
-	newNode->symbol = s;
-	newNode->leaf = l;
-	newNode->count = c;
-	newNode->left = NIL;
-	newNode->right = NIL;
-	return newNode;
-}
 
 treeNode * join (treeNode *l, treeNode *r);
 static inline void spaces(int c) { for (int i = 0; i < c; i += 1) { putchar(' '); } return; }
@@ -67,16 +63,16 @@ void printTree(treeNode *t, int depth)
         {
                 if (isalnum(t->symbol))
                 {
-                        spaces(4 * depth); printf("%c (%llu)\n", t->symbol, t->count);
+                        spaces(4 * depth); printf("%c (%lu)\n", t->symbol, t->count);
                 }
                 else
                 {
-                        spaces(4 * depth); printf("%X (%llu)\n", t->symbol, t->count);
+                        spaces(4 * depth); printf("%X (%lu)\n", t->symbol, t->count);
                 }
         }
         else if (t)
         {
-                spaces(4 * depth); printf("$ (%llu)\n", t->count);
+                spaces(4 * depth); printf("$ (%lu)\n", t->count);
                 printTree(t->left, depth + 1);
                 printTree(t->right, depth + 1);
         }
