@@ -55,7 +55,13 @@ int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 	return -1;
 }
 
-treeNode * join (treeNode *l, treeNode *r);
+treeNode * join (treeNode *l, treeNode *r)
+{
+	treeNode *node = newNode( '$',0 , 0);
+	node->left = l;
+	node->right = r;
+	return node;
+}
 static inline void spaces(int c) { for (int i = 0; i < c; i += 1) { putchar(' '); } return; }
 void printTree(treeNode *t, int depth)
 {
