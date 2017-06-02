@@ -33,7 +33,6 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
 int32_t stepTree(treeNode *root, treeNode **t, uint32_t code);
 // Parse a Huffman tree to build codes
 void buildCode(treeNode *t, code s, code table[256]);
-
 // Delete a tree
 void *delTree(treeNode *t);
 

@@ -1,5 +1,7 @@
 # include <stdint.h>
 # include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
 # include <ctype.h>
 # include "huffman.h"
 
@@ -27,8 +29,25 @@ void *delTree(treeNode *t)
 	}
 	return NIL;
 }
-void dumpTree(treeNode *t, int file);
+void dumpTree(treeNode *t, int file)
+{
+	//file = open("",O_CREAT | O_TRUNC | O_WRONLY,0644);
+	
+	//close(file);
+	 write( file,"test",4);
+	return;
+}
+// writes representaition of tree to file
+// postorder traversal  if called on a leaf write l write I when called on 
 treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
+
+int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
+{
+	//pass pointer points to callers local var treenode* update local variable with new treenode value either left or right child of the root you pass in
+	//if code is zero go left code 1 right
+	//return if could stepTree
+	return -1;
+}
 treeNode * newNode( uint8_t s, bool l, uint64_t c)
 {
 	treeNode *newNode = malloc(sizeof(treeNode));
@@ -39,8 +58,8 @@ treeNode * newNode( uint8_t s, bool l, uint64_t c)
 	newNode->right = NIL;
 	return newNode;
 }
-treeNode * join (treeNode *l, treeNode *r);
 
+treeNode * join (treeNode *l, treeNode *r);
 static inline void spaces(int c) { for (int i = 0; i < c; i += 1) { putchar(' '); } return; }
 void printTree(treeNode *t, int depth)
 {
