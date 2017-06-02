@@ -7,9 +7,19 @@
 # define NIL ( void *) 0
 # endif
 
+treeNode * newNode( uint8_t s, bool l, uint64_t c)
+{
+	treeNode *newNode = malloc(sizeof(treeNode));
+	newNode->symbol = s;
+	newNode->leaf = l;
+	newNode->count = c;
+	newNode->left = NIL;
+	newNode->right = NIL;
+	return newNode;
+}	
 void *delTree(treeNode *t)
 {
-	if (t != NIL)
+	while(t != NIL)
 	{
 		delTree(t->left);
 		delTree(t->right);
@@ -17,7 +27,23 @@ void *delTree(treeNode *t)
 	}
 	return NIL;
 }
-
+void dumpTree(treeNode *t, int file);
+treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
+treeNode * newNode( uint8_t s, bool l, uint64_t c)
+{
+	treeNode *newNode = malloc(sizeof(treeNode));
+	newNode->symbol = s;
+	newNode->leaf = l;
+	newNode->count = c;
+	newNode->left = NIL;
+	newNode->right = NIL;
+	return newNode;
+}	delTree(t->right);
+		delNode(t);
+	}
+	return NIL;
+}
+treeNode * join (treeNode *l, treeNode *r);
 
 static inline void spaces(int c) { for (int i = 0; i < c; i += 1) { putchar(' '); } return; }
 void printTree(treeNode *t, int depth)

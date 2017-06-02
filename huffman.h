@@ -20,16 +20,7 @@ struct DAH
 };
 
 // New node , with symbols , leaf or not , a count associated with it
-static inline treeNode * newNode( uint8_t s, bool l, uint64_t c)
-{
-	treeNode *newNode = malloc(sizeof(treeNode));
-	newNode->symbol = s;
-	newNode->leaf = l;
-	newNode->count = c;
-	newNode->left = NIL;
-	newNode->right = NIL;
-	return newNode;
-}
+treeNode * newNode( uint8_t s, bool l, uint64_t c);
 
 
 // Dump a Huffman tree onto a file
@@ -39,16 +30,14 @@ void dumpTree(treeNode *t, int file);
 treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
 
 // Step through a tree following the code
-static inline int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
-{
-	return -1;	// when its an interior node;
-}
-
+int32_t stepTree(treeNode *root, treeNode **t, uint32_t code);
 // Parse a Huffman tree to build codes
 void buildCode(treeNode *t, code s, code table[256]);
+
 // Delete a tree
 void *delTree(treeNode *t);
 
+// Delete a node
 static inline void delNode(treeNode *h) 
 {
 	if (h != NIL)
