@@ -96,13 +96,13 @@ void printQueue(queue *q)
 int main(void)
 {
 	queue *q = newQueue(10);
-	uint32_t *a = 500;
+	//uint32_t *a = 500;
 	enqueue(q, 3);
 	enqueue(q, 5);
 	enqueue(q, 4);
 	enqueue(q, 8);
 	enqueue(q, 2);
-	dequeue(q, a);
+	//dequeue(q, a);
 	enqueue(q, 1);
 	enqueue(q, 50);
 	enqueue(q, 49);

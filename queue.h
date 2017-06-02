@@ -4,7 +4,7 @@
 # include <stdbool.h>
 
 typedef uint32_t item;
-
+//at the end, make this a treeNode * item, same with stack.h
 typedef struct queue
 {
 	uint32_t size;
