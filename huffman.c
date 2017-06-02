@@ -38,10 +38,6 @@ treeNode * newNode( uint8_t s, bool l, uint64_t c)
 	newNode->left = NIL;
 	newNode->right = NIL;
 	return newNode;
-}	delTree(t->right);
-		delNode(t);
-	}
-	return NIL;
 }
 treeNode * join (treeNode *l, treeNode *r);
 
