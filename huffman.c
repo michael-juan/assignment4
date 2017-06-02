@@ -19,7 +19,7 @@ treeNode * newNode( uint8_t s, bool l, uint64_t c)
 }	
 void *delTree(treeNode *t)
 {
-	while(t != NIL)
+	if(t != NIL)
 	{
 		delTree(t->left);
 		delTree(t->right);

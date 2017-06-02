@@ -1,11 +1,11 @@
 # include <stdint.h>
 # include <stdio.h>
-//# include <huffman.h>
+# include "huffman.h"
 
 int main(void)
 {
 	FILE *fp = fopen("/home/michael/Documents/assignment4/file", "r");
-	static uint32_t histogram[256];
+	static uint64_t histogram[256];
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
 	uint8_t temp;
