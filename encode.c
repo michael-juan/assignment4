@@ -16,7 +16,7 @@ int main(void)
 	fclose(fp);
 	for(int i = 0; i < 256; i++)
 	{
-		printf("%d %u \n",i,histogram[i]);
+		printf("%x %u \n",i,histogram[i]);
 	}
 	return 0;
 }
