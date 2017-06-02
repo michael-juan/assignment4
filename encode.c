@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	FILE *fp = fopen("/home/michael/Documents/assignment4/file", "r");
+	FILE *fp = fopen("sample.txt", "r");
 	static uint64_t histogram[256];
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
