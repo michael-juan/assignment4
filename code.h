@@ -19,43 +19,43 @@ static inline code newCode ()
 }
 static inline bool pushCode ( code *c , uint32_t k )
 {
-	if (c - > l > 256)
+	if (c->l > 256)
 	{
 		return false;
 	}
 	else if ( k == 0)
 	{
-		c - > bits [c - > l / 8] &= ~(0 x1 << (c - > l % 8) );
-		c - > l += 1;
+		c->bits [c->l / 8] &= ~(0x1 << (c->l % 8) );
+		c->l += 1;
 	}
 	else
 	{
-		c - > bits [c - > l / 8] |= (0 x1 << (c - > l % 8) );
-		c - > l += 1;
+		c->bits [c->l / 8] |= (0x1 << (c->l % 8) );
+		c->l += 1;
 	}
 	return true ;
 }
-static inline bool popCode ( code *c, uint32_t * k )
+static inline bool popCode ( code *c, uint32_t *k )
 {
-	if (c - > l == 0)
+	if (c->l == 0)
 	{
 		return false;
 	}
 	else
 	{
-		c - > l -= 1;
-		*k = ((0 x1 << (c - > l % 8)) & c - > bits [c - > l / 8]) >> (c - > l % 8);
+		c->l -= 1;
+		*k = ((0x1 << (c->l % 8)) & c->bits [c->l / 8]) >> (c->l % 8);
 		return true;
 	}
 }
 static inline bool emptyCode (code * c) 
 {
-	return c - > l ==0;
+	return c->l ==0;
 }
 
 static inline bool fullCode (code * c)
 {
-	return c - > l == 256;
+	return c->l == 256;
 }
 
 # endif
