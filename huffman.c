@@ -174,7 +174,7 @@ void printTree(treeNode *t, int depth)
 
 	return;
 }
-
+/*
 int main(void)
 {
 	//int fd = open("sample.txt", O_WRONLY);
@@ -197,3 +197,4 @@ int main(void)
 	delTree(FATHER);
 	delTree(root);	
 }
+*/

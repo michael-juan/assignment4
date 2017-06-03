@@ -2,8 +2,9 @@
 # define _QUEUE_H
 # include <stdint.h>
 # include <stdbool.h>
+# include "huffman.h"
 
-typedef uint32_t item;
+typedef treeNode *item;
 //at the end, make this a treeNode * item, same with stack.h
 typedef struct queue
 {
