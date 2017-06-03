@@ -174,6 +174,7 @@ void printTree(treeNode *t, int depth)
 
 	return;
 }
+<<<<<<< HEAD
 /*
 int main(void)
 {
@@ -198,3 +199,28 @@ int main(void)
 	delTree(root);	
 }
 */
+=======
+
+// int main(void)
+// {
+// 	//int fd = open("sample.txt", O_WRONLY);
+// 
+// 	treeNode *a = newNode('A', 1, 2);
+// 	treeNode *b = newNode('V', 1, 9);
+// 	treeNode *rootA = join(a, b);
+// 	treeNode *c = newNode('h', 1, 14);
+// 	treeNode *d = newNode('f', 1, 12);
+// 	treeNode *rootB = join(c, d);
+// 	treeNode *root = join(rootA, rootB);
+// 	dumpTree(root, 1);
+// 	
+// 	uint8_t savedTree[8] = {"LALBLCII"};
+// 	static code s, array[256];
+// 	buildCode(root, s, array); 
+// 	treeNode *FATHER = loadTree(savedTree, 8);
+// 	printTree(FATHER, 5);
+// 	printTree(root, 1);
+// 	delTree(FATHER);
+// 	delTree(root);	
+// }
+>>>>>>> 1bf9d6bc68eff535f637e55f0bb5b0cad121e3d2
