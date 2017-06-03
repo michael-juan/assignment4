@@ -19,7 +19,7 @@ struct DAH
 	treeNode *left, *right;
 };
 
-// New node , with symbols , leaf or not , a count associated with it
+// New node with symbols , leaf or not , a count associated with it
 treeNode *newNode( uint8_t s, bool l, uint64_t c);
 
 
