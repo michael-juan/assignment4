@@ -18,7 +18,7 @@ void delStack(stack *s)
 	return;
 }
 
-bool empty(stack *s)
+bool stackEmpty(stack *s)
 {
 	if (s -> top == 0)
 	{
@@ -27,7 +27,7 @@ bool empty(stack *s)
 	return false;
 }
 
-bool full(stack *s)
+bool stackFull(stack *s)
 {
 	if (s -> size == s -> top)
 	{
@@ -38,7 +38,11 @@ bool full(stack *s)
 
 item pop(stack *s)
 {
-	return s -> entries[--(s -> top)]; 
+	if (!stackEmpty(s))
+	{
+		return s -> entries[--(s -> top)]; 
+	}
+	return NULL;
 }
 
 void push(stack *s, item i)
@@ -48,7 +52,7 @@ void push(stack *s, item i)
 		(s -> size)++;
 		s -> entries = realloc(s -> entries, (s -> size)*(sizeof(item)));
 	}
-	else if (full(s))
+	else if (stackFull(s))
 	{
 		(s -> size) *= 2;
 		s -> entries = realloc(s -> entries, (s -> size)*(sizeof(item))); 
