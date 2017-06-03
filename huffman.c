@@ -65,7 +65,7 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 		if (savedTree[i] == 'L')
 		{
 			i++;
-			treeNode *node = newNode(savedTree[i], true, 1);
+			treeNode *node = newNode(savedTree[i], true, 0);
 			push(s, node);
 		}
 		else if(savedTree[i] == 'I')
@@ -76,6 +76,7 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 			push(s, root);	
 		}
 	}
+	delStack(s);
 	return root;	
 }
 
@@ -177,7 +178,7 @@ void printTree(treeNode *t, int depth)
 int main(void)
 {
 	//int fd = open("sample.txt", O_WRONLY);
-/*	
+
 	treeNode *a = newNode('A', 1, 2);
 	treeNode *b = newNode('V', 1, 9);
 	treeNode *rootA = join(a, b);
@@ -186,9 +187,13 @@ int main(void)
 	treeNode *rootB = join(c, d);
 	treeNode *root = join(rootA, rootB);
 	dumpTree(root, 1);
-*/
-	uint8_t savedTree[11] = {"LALVILhLfII"};
-	printTree(loadTree(savedTree, 11), 11);
-	///printTree(root, 1);
-	//delTree(root);	
+	
+	uint8_t savedTree[8] = {"LALBLCII"};
+	static code s, array[256];
+	buildCode(root, s, array); 
+	treeNode *FATHER = loadTree(savedTree, 8);
+	printTree(FATHER, 5);
+	printTree(root, 1);
+	delTree(FATHER);
+	delTree(root);	
 }

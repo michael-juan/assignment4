@@ -17,7 +17,7 @@ static inline code newCode ()
 	t.l = 0;
 	return t;
 }
-static inline bool pushCode ( code *c , uint32_t k )
+static inline bool pushCode (code *c , uint32_t k )
 {
 	if (c->l > 256)
 	{
@@ -56,6 +56,11 @@ static inline bool emptyCode (code * c)
 static inline bool fullCode (code * c)
 {
 	return c->l == 256;
+}
+
+static inline uint8_t valCode(code *val, uint32_t k)  /* the value of the bit in bit Vector val at index k is returned */
+{
+        return (val -> bits[k>>3] >> (k%8)) & (0x1);
 }
 
 # endif
