@@ -174,7 +174,7 @@ void printTree(treeNode *t, int depth)
 
 	return;
 }
-<<<<<<< HEAD
+
 /*
 int main(void)
 {
@@ -199,7 +199,6 @@ int main(void)
 	delTree(root);	
 }
 */
-=======
 
 // int main(void)
 // {
@@ -223,4 +222,4 @@ int main(void)
 // 	delTree(FATHER);
 // 	delTree(root);	
 // }
->>>>>>> 1bf9d6bc68eff535f637e55f0bb5b0cad121e3d2
+
