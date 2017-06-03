@@ -1,14 +1,14 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -std=c99 -g
-OBJECTS = huffman.o stack.o
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -g
+OBJECTS = huffman.o stack.o queue.o decode.o
 
 .PHONY  :       all     clean
 
-all     :       testing
-testing :       $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o testing
-encode :       $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -c encode.c -o encode
+all     :       decode
+decode :       $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o decode
+decode.o	:	decode.c
+	$(CC) $(CFLAGS) -c decode.c
 huffman.o :       huffman.c
 	$(CC) $(CFLAGS) -c huffman.c
 stack.o :       stack.c
@@ -16,4 +16,4 @@ stack.o :       stack.c
 queue.o :       queue.c
 	$(CC) $(CFLAGS) -c queue.c
 clean   :
-	rm -f $(OBJECTS) testing encode.o 
+	rm -f $(OBJECTS) decode 
