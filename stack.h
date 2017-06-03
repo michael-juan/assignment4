@@ -2,8 +2,9 @@
 # define _STACK_H
 # include <stdint.h>
 # include <stdbool.h>
+# include "huffman.h"
 
-typedef uint32_t item; 
+typedef treeNode *item; 
 
 typedef struct stack
 {

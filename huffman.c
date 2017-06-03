@@ -8,6 +8,7 @@
 # include <ctype.h>
 # include "huffman.h"
 # include "code.h"
+# include "stack.h"
 
 # ifndef NIL
 # define NIL ( void *) 0
@@ -36,13 +37,7 @@ void *delTree(treeNode *t)
 }
 
 void dumpTree(treeNode *t, int file)
-{
-	//file = open("",O_CREAT | O_TRUNC | O_WRONLY,0644);
-	//struct stat fileStat;
-	//uint64_t sFileSize; 
-	//write(file,"\xde\xad\xd0\x0d",4);
-	//dumpTree(t -> left, file);
-	//dumpTree(t -> right, file);	
+{	
 	if (t -> leaf)
 	{
 		write(file, "L", 1);
@@ -57,14 +52,34 @@ void dumpTree(treeNode *t, int file)
 	return;
 }
 
-/*
+
 // writes representaition of tree to file
 // postorder traversal  if called on a leaf write l write I when called on 
+
 treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 {
-
+	stack *s = newStack();
+	treeNode *root;
+	for (uint16_t i = 0; i < treeBytes; i++)
+	{
+		if (savedTree[i] == 'L')
+		{
+			i++;
+			treeNode *node = newNode(savedTree[i], true, 1);
+			push(s, node);
+		}
+		else if(savedTree[i] == 'I')
+		{	
+			treeNode *a = pop(s);
+			treeNode *b = pop(s);
+			root = join(b, a);
+			push(s, root);	
+		}
+	}
+	return root;	
 }
 
+/*
 int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 {
 	//pass pointer points to callers local var treenode* update local variable with new treenode value either left or right child of the root you pass in
@@ -162,6 +177,7 @@ void printTree(treeNode *t, int depth)
 int main(void)
 {
 	//int fd = open("sample.txt", O_WRONLY);
+/*	
 	treeNode *a = newNode('A', 1, 2);
 	treeNode *b = newNode('V', 1, 9);
 	treeNode *rootA = join(a, b);
@@ -170,6 +186,9 @@ int main(void)
 	treeNode *rootB = join(c, d);
 	treeNode *root = join(rootA, rootB);
 	dumpTree(root, 1);
-	printTree(root, 1);
-	delTree(root);	
+*/
+	uint8_t savedTree[11] = {"LALVILhLfII"};
+	printTree(loadTree(savedTree, 11), 11);
+	///printTree(root, 1);
+	//delTree(root);	
 }

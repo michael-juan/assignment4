@@ -38,7 +38,7 @@ bool full(stack *s)
 
 item pop(stack *s)
 {
-	return s -> entries[(s -> top)--]; 
+	return s -> entries[--(s -> top)]; 
 }
 
 void push(stack *s, item i)
@@ -56,7 +56,7 @@ void push(stack *s, item i)
 	s -> entries[(s -> top)++] = i;
 	return;
 }
-
+/*
 void printStack(stack *s)
 {
 	for (uint32_t i = 0; i < s -> top; i++)
@@ -65,6 +65,7 @@ void printStack(stack *s)
 	}
 	printf("\n");
 }
+*/
 /*
 int main()
 {
