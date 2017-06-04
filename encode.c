@@ -7,7 +7,7 @@
 
 int main(void)
 {
-	FILE *fp = fopen("sample.txt", "r");
+	FILE *fp = fopen("badspeak.txt", "r");
 	static uint32_t histogram[256];
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
@@ -30,21 +30,22 @@ int main(void)
 		}
 	}
 	printQueue(histogramQueue);
-	treeNode *tempItemA = newNode('$', 0, 0);
-	treeNode *tempItemB= newNode('$', 0, 0);
+	treeNode *itemA = newNode('$', 0, 0);
+	treeNode *itemB = newNode('$', 0, 0);
 
 	while(empty(histogramQueue) == 0 )
 	{
-		dequeue(histogramQueue, &tempItemA);
+		dequeue(histogramQueue, &itemA);
 		if(empty(histogramQueue))
 		{
 			break;
 		}
-		dequeue(histogramQueue, &tempItemB);
-		enqueue(histogramQueue,join(tempItemA, tempItemB));
+		dequeue(histogramQueue, &itemB);
+		enqueue(histogramQueue,join(itemA, itemB));
 	
 	}
-	printTree(tempItemA,15);
+	printTree(itemA,6);
+	buildCode(itemA, code s, code table[256]);
 	
 	
 	
