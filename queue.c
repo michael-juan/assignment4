@@ -82,16 +82,16 @@ bool enqueue(queue *q, item i)
 	return true;
 
 }
-/*
+
 void printQueue(queue *q)
 {		
 	for (uint32_t i = q -> tail; i < q -> head; i++)
 	{
-		printQueue("%u\t", q -> Q[i]);
+		printf("%lu\t", (q -> Q[i]) -> count);
 	}
 	printf("\n");
 }
-
+/*
 int main(void)
 {
 	queue *q = newQueue(20);
