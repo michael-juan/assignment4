@@ -21,4 +21,4 @@ stack.o :       stack.c
 queue.o :       queue.c
 	$(CC) $(CFLAGS) -c queue.c
 clean   :
-	rm -f $(OBJECTSE) decode.o encode decode
+	rm -f $(OBJECTSE) decode.o encode decode 
