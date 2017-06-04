@@ -4,11 +4,12 @@
 # include "code.h"
 # include <stdint.h>
 # include <unistd.h>
+# include <stdlib.h>
 
 int main(void)
 {
 	uint8_t magicNum[14];
-	uint16_t treeSize = 0;
+	uint16_t treeSize = 0x00;
 	int fd = open("secret.zzZ", O_RDONLY);
 	read(fd, magicNum, 14);
 	for(int8_t i = 3; i > -1; i--)
@@ -22,13 +23,18 @@ int main(void)
 	}
 	printf("\n");
 
-	for (int8_t i = 13; i > 11; i--)
-        {
-		treeSize = 10 * treeSize + magicNum[i];
-                printf("%d", magicNum[i]);
-        }
+	treeSize |= ((magicNum[13]) << 8); 
+	treeSize |= (magicNum[12]);
 
         printf("\n");
-	printf("%X\n", treeSize);
+	printf("%d\n", treeSize);
+	
+	uint8_t *savedTree = malloc(sizeof(uint8_t)*treeSize);	
+	read(fd, savedTree, treeSize);
+	
+	treeNode *tree = loadTree(savedTree, treeSize);
+	printTree(tree, 1);
+	free(savedTree);
+	delTree(tree);
 	return 0;
 }
