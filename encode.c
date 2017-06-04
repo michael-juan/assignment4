@@ -3,6 +3,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "huffman.h"
+# include "queue.h"
 
 int main(void)
 {
@@ -18,6 +19,17 @@ int main(void)
 		histogram[temp]++;
 		numBytes++;
 	}
+	
+	queue *histogramQueue = newQueue(768);
+	for (uint16_t i = 0; i < 256; i++)
+	{
+		if (histogram[i])
+		{
+			enqueue(histogramQueue, newNode(i, 0, histogram[i]));
+		}
+	}
+	
+	
 	
 	int file = open("fuckingfuck",O_CREAT | O_TRUNC | O_WRONLY,0644);
 	write(file, "\xAD\xDE\x0D\xD0", 4);
