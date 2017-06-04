@@ -30,14 +30,22 @@ int main(void)
 		}
 	}
 	printQueue(histogramQueue);
-// 	treeNode *tempItemLeft *tempItemRight;
-// 	while( empty(histogramQueue) != 0 )
-// 	{
-// 		dequeue(histogramQueue, tempItemLeft);
-// 		dequeue(histogramQueue, tempItemLeft);
-// // 		enqueue(histogramQueue, );
-// 	}
-// 	
+	treeNode *tempItemA = newNode('$', 0, 0);
+	treeNode *tempItemB= newNode('$', 0, 0);
+
+	while(empty(histogramQueue) == 0 )
+	{
+		dequeue(histogramQueue, &tempItemA);
+		if(empty(histogramQueue))
+		{
+			break;
+		}
+		dequeue(histogramQueue, &tempItemB);
+		enqueue(histogramQueue,join(tempItemA, tempItemB));
+	
+	}
+	printTree(tempItemA,15);
+	
 	
 	
 	int file = open("fuckingfuck",O_CREAT | O_TRUNC | O_WRONLY,0644);
