@@ -80,15 +80,30 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 	return root;	
 }
 
-/*
+
 int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 {
 	//pass pointer points to callers local var treenode* update local variable with new treenode value either left or right child of the root you pass in
 	//if code is zero go left code 1 right
-	//return if could stepTree
+	//return if could stepTreetreeNode **t
+	uint8_t sym;
+	if (code)
+	{
+		*t = root -> right;
+	}
+	else if (code == 0)
+	{
+		*t = root -> left;
+	}
+	if ((*t) -> leaf)
+        {
+                sym = (*t) -> symbol;
+                *t = root;
+                return sym;
+        }
 	return -1;
 }
-*/
+
 void buildCode(treeNode *t, code s, code table[256])
 {
 	uint32_t temp;
@@ -155,7 +170,7 @@ void printTree(treeNode *t, int depth)
 
 		if (t->leaf)
 		{
-			if (isalnum(t->symbol))
+			if (isalnum(t->symbol) || ispunct(t -> symbol))
 			{
 				spaces(4 * depth); printf("'%c' (%lu)\n", t->symbol, t->count);
 			}
