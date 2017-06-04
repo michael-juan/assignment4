@@ -21,6 +21,6 @@ bool full(queue *q);
 
 bool enqueue(queue *q, item i);
 bool dequeue(queue *q, item *i);
-
+void printQueue(queue *q);
 # endif
 

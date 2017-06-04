@@ -21,14 +21,23 @@ int main(void)
 	}
 	
 	queue *histogramQueue = newQueue(768);
+	
 	for (uint16_t i = 0; i < 256; i++)
 	{
 		if (histogram[i])
 		{
-			enqueue(histogramQueue, newNode(i, 0, histogram[i]));
+			enqueue(histogramQueue, newNode(i, 1, histogram[i]));
 		}
 	}
-	
+	printQueue(histogramQueue);
+// 	treeNode *tempItemLeft *tempItemRight;
+// 	while( empty(histogramQueue) != 0 )
+// 	{
+// 		dequeue(histogramQueue, tempItemLeft);
+// 		dequeue(histogramQueue, tempItemLeft);
+// // 		enqueue(histogramQueue, );
+// 	}
+// 	
 	
 	
 	int file = open("fuckingfuck",O_CREAT | O_TRUNC | O_WRONLY,0644);
