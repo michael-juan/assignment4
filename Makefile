@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -g
-OBJECTSD = huffman.o stack.o queue.o decode.o
+OBJECTSD = huffman.o stack.o queue.o decode.o bv.o
 OBJECTSE = huffman.o stack.o queue.o encode.o
 
 .PHONY  :       all     clean
@@ -14,6 +14,8 @@ encode :       $(OBJECTSE)
 	$(CC) $(CFLAGS) $(OBJECTSE) -o encode
 encode.o :	encode.c
 	$(CC) $(CFLAGS) -c encode.c
+bv.o	:	bv.c
+	$(CC) $(CFLAGS) -c bv.c
 huffman.o :       huffman.c
 	$(CC) $(CFLAGS) -c huffman.c
 stack.o :       stack.c
@@ -21,4 +23,4 @@ stack.o :       stack.c
 queue.o :       queue.c
 	$(CC) $(CFLAGS) -c queue.c
 clean   :
-	rm -f $(OBJECTSE) decode.o encode decode 
+	rm -f $(OBJECTSD) encode.o encode decode 

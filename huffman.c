@@ -89,11 +89,11 @@ int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 	uint8_t sym;
 	if (code)
 	{
-		*t = root -> right;
+		*t = (*t) -> right;
 	}
 	else if (code == 0)
 	{
-		*t = root -> left;
+		*t = (*t) -> left;
 	}
 	if ((*t) -> leaf)
         {
