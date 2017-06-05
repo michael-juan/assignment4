@@ -7,14 +7,15 @@
 
 int main(void)
 {
-	FILE *fp = fopen("badspeak.txt", "r");
+	//FILE *fp = fopen("badspeak.txt", "r");
+	int inputFile = open("badspeak.txt",O_RDONLY);
 	static uint32_t histogram[256];
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
 	uint64_t numBytes = 0;
 	uint8_t temp;
 	
-	while (fscanf(fp, "%c", &temp) == 1)
+	while (read(inputFile, &temp, 1))
 	{
 		histogram[temp]++;
 		numBytes++;
@@ -44,8 +45,15 @@ int main(void)
 		enqueue(histogramQueue,join(itemA, itemB));
 	
 	}
-	printTree(itemA,6);
-	buildCode(itemA, code s, code table[256]);
+	printTree(itemA,10);
+	code s = newCode();
+	code codeTable[256];
+	buildCode(itemA, s, codeTable);
+
+// 	for(int i = 0; i < numBytes; i++ )
+// 	{
+// 		
+// 	}
 	
 	
 	
@@ -53,8 +61,9 @@ int main(void)
 	write(file, "\xAD\xDE\x0D\xD0", 4);
 	write(file, &numBytes, sizeof(uint64_t));
 	
+	close(inputFile);
 	close(file);
-	fclose(fp);
+//	fclose(fp);
 // 	for(int i = 0; i < 256; i++)
 // 	{
 // 		printf("%x %u \n",i,histogram[i]);
