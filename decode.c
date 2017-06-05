@@ -19,41 +19,31 @@ int main(void)
 	read(fd, &fileSize, 8);
 	read(fd, &treeSize, 2);
 
-	printf("Magic No: %X\n", magicNum);
+//	printf("Magic No: %X\n", magicNum);
 	
 	if (magicNum != 0xdeadd00d)
 	{
 		printf("Invalid File: Magic Number does not match.\n");
 		return 0;
 	}	
-	printf("File Size: %lu\n", fileSize);
+//	printf("File Size: %lu\n", fileSize);
 	
-	printf("Tree Size: %d\n", treeSize);
+//	printf("Tree Size: %d\n", treeSize);
 	
 	uint8_t *savedTree = malloc(sizeof(uint8_t)*treeSize);	
 	read(fd, savedTree, treeSize);
 	
 	treeNode *tree = loadTree(savedTree, treeSize);
-	printTree(tree, 1);
-	
-//	treeNode **t = &(tree);
-		
+//	printTree(tree, 1);
+			
 	uint64_t bytesDecoded = 0;
-	uint8_t *buf = malloc(sizeof(uint8_t)*fileSize);
-	read(fd, buf, fileSize);
-	bitV *bits = newVec(fileSize*8);
-        bits -> v = buf;
-/*
-	for (uint32_t i = 0; i < bits -> l; i++)
-        {
-     		printf("%d", valBit(bits, i));
-        }
-	printf("\n");
-*/	
+	
 	treeNode *t = tree;
-	while (bytesDecoded <= fileSize)
+	while (bytesDecoded < fileSize)
 	{
-		for (uint32_t i = 0; i < bits -> l; i++)
+		bitV *bits = newVec(8);
+		read(fd, bits->v, 1);
+		for (uint32_t i = 0; i < bits->l; i++)
                 {
                         if (valBit(bits, i) == 0)
 			{
@@ -69,48 +59,18 @@ int main(void)
 				t = tree;
 				bytesDecoded++;
 			}
+			if(bytesDecoded == fileSize)
+			{
+				break;
+			}
                 }
+		delVec(bits);
 	}
 
-/*		
-	do
-	{
-		n = read(fd, buf, 4096);	
-		bitV *bits = newVec(n*8);
-		bits -> v = buf;
-		
-		for (uint32_t i = 0; i < bits -> l; i++)
-		{
-			int32_t symbol = stepTree(tree, t, bits -> v[i]);
-			if (symbol != -1)
-			{
-				write(1, &symbol, 1);
-			}
-			if(++bytesDecoded >= fileSize)
-			{
-				return 0;
-			}
-		}
-	}
-	while (n != 4096);
-*/
-	delVec(bits);
-	//free(buf);
+
+	close(fd);
 	free(savedTree);
 	delTree(tree);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	return 0;
