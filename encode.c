@@ -56,7 +56,7 @@ int main(void)
 	t.bits = {0,0,1};
 	t.l = 3;
 	test->l = t.l+test->l;
-	test ->v =realloc((test->l/8)+1, sizeof(uint8_t));
+	test ->v =realloc(test ->v, sizeof(uint8_t)*((test->l/8)+1));
 	for(uint32_t i = 0; i < numBytes; i++ )
 	{
 		
