@@ -10,9 +10,42 @@
 # include "bv.h"
 # include "code.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-	int inputFile = open("KJV.txt",O_RDONLY);
+
+	int inputFile = 0;
+	int outputFile = 1;
+	int c = 0;
+	while ((c = getopt(argc, argv, "i:o:vp")) != -1)
+	{
+		switch (c)
+		{
+			case 'i':
+			{
+				inputFile = open(optarg, O_RDONLY);
+				break;
+			}
+			case 'o':
+			{
+				outputFile = open(optarg,O_CREAT | O_TRUNC | O_WRONLY,0644);
+				break;
+			}
+			case 'v':
+			{
+				break;
+			}
+			case 'p':
+			{
+				break;
+			}
+			default:
+			{
+				inputFile = 0;
+				outputFile = 1;
+				break;
+			}
+		}
+	}
 	
 	struct stat fileStat;	//http://codewiki.wikidot.com/c:system-calls:fstat
 
@@ -79,8 +112,8 @@ int main(void)
 	
 	
 //	int file = open("testoutput",O_CREAT | O_TRUNC | O_WRONLY,0644);
-	write(1, "\x0D\xD0\xAD\xDE", 4);	//magic number
-	write(1, &numBytes, sizeof(uint64_t));	//file size
+	write(outputFile, "\x0D\xD0\xAD\xDE", 4);	//magic number
+	write(outputFile, &numBytes, sizeof(uint64_t));	//file size
 	uint16_t huffmanTreeSize = 0;
 	for (int i = 0; i < 256;i++)
 	{
@@ -91,9 +124,9 @@ int main(void)
 	}
 
 	huffmanTreeSize = (huffmanTreeSize*3) - 1;
-	write(1, &huffmanTreeSize, sizeof(uint16_t));
-	dumpTree(itemA, 1);
-	write(1, outputBuffer->v, (index+7)/8);
+	write(outputFile, &huffmanTreeSize, sizeof(uint16_t));
+	dumpTree(itemA, outputFile);
+	write(outputFile, outputBuffer->v, (index+7)/8);
 	
 	delQueue(histogramQueue);
 	delTree(itemA);
@@ -101,7 +134,7 @@ int main(void)
 	delVec(outputBuffer);
 	free(inputBuffer);
 	close(inputFile);
-	close(1);
+	close(outputFile);
 
 	return 0;
 }
