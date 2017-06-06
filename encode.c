@@ -5,6 +5,24 @@
 # include "huffman.h"
 # include "queue.h"
 # include "bv.h"
+# include "code.h"
+
+void append(bitV *vec, code s)
+{
+	uint32_t originalLength = vec -> l;
+	vec -> l = s.l + vec->l;
+        vec ->v = realloc(vec ->v, sizeof(uint8_t)*((vec->l/8)+1));
+	uint32_t counter = 32;
+
+	for (uint32_t i = originalLength; i < vec -> l; i++) 
+	{
+		setBit(vec, i)s.bits[counter];
+		counter--; 
+	}
+
+//	(vec -> v) |= (0x0 | s.bits);
+}
+
 int main(void)
 {
 	int inputFile = open("badspeak.txt",O_RDONLY);
@@ -52,11 +70,24 @@ int main(void)
 	//uint8_t inputFile
 	//uint8_t buffer[8192];
 	bitV *test = newVec(5);
-	code t = newCode();
-	t.bits = {0,0,1};
-	t.l = 3;
-	test->l = t.l+test->l;
-	test ->v =realloc(test ->v, sizeof(uint8_t)*((test->l/8)+1));
+	for (uint32_t i = 0; i < test -> l; i++)
+	{
+		printf("%u", valBit(test,i));
+	}
+	printf("\n");
+	printCode(&codeTable[122]);
+	append(test, codeTable[122]);
+	
+	for (uint32_t i = 0; i < test -> l; i++)
+        {
+                printf("%u", valBit(test,i));
+        }
+        printf("\n");
+	//code t = newCode();
+	//t -> bits = {0,0,1};
+	//t.l = 3;
+	//test->l = t.l+test->l;
+	//test ->v =realloc(test ->v, sizeof(uint8_t)*((test->l/8)+1));
 	for(uint32_t i = 0; i < numBytes; i++ )
 	{
 		
