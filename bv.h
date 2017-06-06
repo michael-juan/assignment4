@@ -24,8 +24,4 @@ uint8_t valBit(bitV *, uint32_t);
 
 uint32_t lenVec(bitV *);
 
-uint8_t checkBit(uint8_t, uint8_t *);
-
-uint8_t getNextBit(uint8_t *, uint8_t);
-
 # endif

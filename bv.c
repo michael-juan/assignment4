@@ -51,26 +51,4 @@ uint32_t lenVec(bitV *lengthVec) /* the length of the bit vector is returned */
 {
 	return lengthVec -> l;
 }
-
-uint8_t checkBit(uint8_t byte, uint8_t *i)
-{
-	byte >>= *i;
-	byte &= 0x1;
-	return byte;
-}
-
-uint8_t getNextBit(uint8_t *i, uint8_t byte)
-{
-	uint8_t bit = checkBit(byte, i);
-	*i += 1;
-	*i %= 8;
-	return bit;
-}
-
-
-
-
-
-
-
  

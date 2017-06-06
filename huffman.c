@@ -2,7 +2,6 @@
 # include <stdio.h>
 
 # include <unistd.h>
-#include <sys/stat.h>
 
 # include <fcntl.h>
 # include <ctype.h>
@@ -52,10 +51,6 @@ void dumpTree(treeNode *t, int file)
 	return;
 }
 
-
-// writes representaition of tree to file
-// postorder traversal  if called on a leaf write l write I when called on 
-
 treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 {
 	stack *s = newStack();
@@ -68,7 +63,7 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 			treeNode *node = newNode(savedTree[i], true, 0);
 			push(s, node);
 		}
-		else if(savedTree[i] == 'I')
+		else if (savedTree[i] == 'I')
 		{	
 			treeNode *a = pop(s);
 			treeNode *b = pop(s);
@@ -78,30 +73,6 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes)
 	}
 	delStack(s);
 	return root;	
-}
-
-
-int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
-{
-	//pass pointer points to callers local var treenode* update local variable with new treenode value either left or right child of the root you pass in
-	//if code is zero go left code 1 right
-	//return if could stepTreetreeNode **t
-	uint8_t sym;
-	if (code)
-	{
-		*t = (*t) -> right;
-	}
-	else if (code == 0)
-	{
-		*t = (*t) -> left;
-	}
-	if ((*t) -> leaf)
-        {
-                sym = (*t) -> symbol;
-                *t = root;
-                return sym;
-        }
-	return -1;
 }
 
 void buildCode(treeNode *t, code s, code table[256])
@@ -134,33 +105,14 @@ treeNode *join(treeNode *l, treeNode *r)
 	return node;
 }
 
-static inline void spaces(int c) { for (int i = 0; i < c; i += 1) { putchar(' '); } return; }
-/*
-void printTree(treeNode *t, int depth)
-{
-        if (t && t->leaf)
-        {
-                if (isalnum(t->symbol))
-                {
-                        spaces(4 * depth); 
-			printf("%c (%lu)\n", t->symbol, t->count);
-                }
-                else
-                {
-                        spaces(4 * depth); 
-			printf("%X (%lu)\n", t->symbol, t->count);
-                }
-        }
-        else if (t)
-        {
-                spaces(4 * depth); 
-		printf("$ (%lu)\n", t->count);
-                printTree(t->left, depth + 1);
-                printTree(t->right, depth + 1);
-        }
-        return;
+static inline void spaces(int c) 
+{ 
+	for (int i = 0; i < c; i += 1) 
+	{ 
+		putchar(' '); 
+	} 
+	return; 
 }
-*/
 
 void printTree(treeNode *t, int depth)
 {
@@ -172,69 +124,21 @@ void printTree(treeNode *t, int depth)
 		{
 			if (isalnum(t->symbol) || ispunct(t -> symbol))
 			{
-				spaces(4 * depth); printf("'%c' (%lu)\n", t->symbol, t->count);
+				spaces(4 * depth); 
+				printf("'%c' (%lu)\n", t->symbol, t->count);
 			}
 			else
 			{
-				spaces(4 * depth); printf("0x%X (%lu)\n", t->symbol, t->count);
+				spaces(4 * depth); 
+				printf("0x%X (%lu)\n", t->symbol, t->count);
 			}
 		}
 		else
 		{
 			spaces(4 * depth); printf("$ (%lu)\n", t->count);
 		}
-
 		printTree(t->right, depth + 1); 
 	}
 
 	return;
 }
-
-/*
-int main(void)
-{
-	//int fd = open("sample.txt", O_WRONLY);
-
-	treeNode *a = newNode('A', 1, 2);
-	treeNode *b = newNode('V', 1, 9);
-	treeNode *rootA = join(a, b);
-	treeNode *c = newNode('h', 1, 14);
-	treeNode *d = newNode('f', 1, 12);
-	treeNode *rootB = join(c, d);
-	treeNode *root = join(rootA, rootB);
-	dumpTree(root, 1);
-	
-	uint8_t savedTree[8] = {"LALBLCII"};
-	static code s, array[256];
-	buildCode(root, s, array); 
-	treeNode *FATHER = loadTree(savedTree, 8);
-	printTree(FATHER, 5);
-	printTree(root, 1);
-	delTree(FATHER);
-	delTree(root);	
-}
-*/
-
-// int main(void)
-// {
-// 	//int fd = open("sample.txt", O_WRONLY);
-// 
-// 	treeNode *a = newNode('A', 1, 2);
-// 	treeNode *b = newNode('V', 1, 9);
-// 	treeNode *rootA = join(a, b);
-// 	treeNode *c = newNode('h', 1, 14);
-// 	treeNode *d = newNode('f', 1, 12);
-// 	treeNode *rootB = join(c, d);
-// 	treeNode *root = join(rootA, rootB);
-// 	dumpTree(root, 1);
-// 	
-// 	uint8_t savedTree[8] = {"LALBLCII"};
-// 	static code s, array[256];
-// 	buildCode(root, s, array); 
-// 	treeNode *FATHER = loadTree(savedTree, 8);
-// 	printTree(FATHER, 5);
-// 	printTree(root, 1);
-// 	delTree(FATHER);
-// 	delTree(root);	
-// }
-
