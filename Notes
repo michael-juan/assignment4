@@ -1,9 +1,0 @@
-take a string and compress it
-
-compute the frequencies of every byte
-
-start with an array of all 0's, with 256 items
-
-"hello world"
-
-in

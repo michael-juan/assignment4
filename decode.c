@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	
 	if (magicNum != 0xdeadd00d)
 	{
-		printf("Invalid File: Magic Number does not match.\n");
+		printf("Not a compressed file\n");
 		return 0;
 	}	
 	

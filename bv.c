@@ -18,7 +18,7 @@ bitV *newVec(uint32_t length)
 
 void delVec(bitV *deleteVec)
 {
-	free((*deleteVec).v); /* the allocated memory using malloc and calloc are freed */
+	free(deleteVec -> v); /* the allocated memory using malloc and calloc are freed */
 	free(deleteVec); /* first the bits are freed, then the memory allocated for the bit vector is freed */
 	return;
 }
