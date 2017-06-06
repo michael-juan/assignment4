@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	int inputFile = 0;
 	int outputFile = 1;
 	int c = 0;
-	while ((c = getopt(argc, argv, "i:o:vp")) != -1)
+	while ((c = getopt(argc, argv, "i:o:vp")) != -1)	//reused structure from assignment3
 	{
 		switch (c)
 		{
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	
-	static uint32_t histogram[256];
+	static uint32_t histogram[256];	//change to memset
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
 	uint64_t numBytes = 0;
