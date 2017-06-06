@@ -12,7 +12,7 @@
 
 int main(int argc, char **argv)
 {
-	int c, fd = 0;
+	int c, fd = 0, fdOut = 0;
 	bool verbose = false, showTree = false;
 
 	while ((c = getopt(argc, argv, "i:o:vp")) != -1)
@@ -27,6 +27,11 @@ int main(int argc, char **argv)
 					printf("Please specify an input file");
 					return 0;
 				}
+				break;
+			}
+			case 'o':
+			{
+				fdOut = open(optarg, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 				break;
 			}
 			case 'v':
@@ -108,7 +113,7 @@ int main(int argc, char **argv)
 		printf("Original %lu bits: tree (%u)\n", fileSize*8, treeSize);
 	}
 	
-	write(1, buf, bytesDecoded);
+	write(fdOut, buf, bytesDecoded);
 	
 	if (showTree)
 	{
