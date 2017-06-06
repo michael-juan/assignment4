@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -g
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -g
 OBJECTSD = huffman.o stack.o queue.o decode.o bv.o
 OBJECTSE = huffman.o stack.o queue.o encode.o
 
