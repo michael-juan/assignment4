@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -Werror -g
 OBJECTSD = huffman.o stack.o queue.o decode.o bv.o
-OBJECTSE = huffman.o stack.o queue.o encode.o
+OBJECTSE = huffman.o stack.o queue.o bv.o encode.o
 
 .PHONY  :       all     clean
 

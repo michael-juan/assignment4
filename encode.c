@@ -1,41 +1,52 @@
 # include <stdint.h>
 # include <stdio.h>
+# include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 # include "huffman.h"
 # include "queue.h"
 # include "bv.h"
 # include "code.h"
 
-void append(bitV *vecOne, bitV *vecTwo)
-{
-	uint32_t originalLength = vecOne -> l;
-	vecOne -> l = vecOne -> l + vecTwo -> l;
-	vecOne ->v = realloc(vecOne ->v, sizeof(uint8_t)*((vecOne->l/4)+1));
-	uint32_t counter = 0;
-
-	for (uint32_t i = originalLength; i < vecOne -> l; i++) 
-	{
-		vecOne -> v[i] = vecTwo -> v[counter];
-		counter++;
-	}
-	
-	delVec(vecTwo);
-}
+// void append(bitV *vecOne, bitV *vecTwo)
+// {
+// 	uint32_t originalLength = vecOne -> l;
+// 	vecOne -> l = vecOne -> l + vecTwo -> l;
+// 	vecOne ->v = realloc(vecOne ->v, sizeof(uint8_t)*((vecOne->l/4)+1));
+// 	uint32_t counter = 0;
+// 
+// 	for (uint32_t i = originalLength; i < vecOne -> l; i++) 
+// 	{
+// 		vecOne -> v[i] = vecTwo -> v[counter];
+// 		counter++;
+// 	}
+// 	
+// 	delVec(vecTwo);
+// }
 
 int main(void)
 {
 	int inputFile = open("badspeak.txt",O_RDONLY);
+	
+	struct stat fileStat;	//http://codewiki.wikidot.com/c:system-calls:fstat
+	if(fstat(inputFile,&fileStat) < 0)  
+	{
+		return 1;
+	}
+	
 	static uint32_t histogram[256];
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
 	uint64_t numBytes = 0;
-	uint8_t temp;
-	
-	while (read(inputFile, &temp, 1))
+	uint8_t *inputBuffer = calloc(fileStat.st_size, sizeof(uint8_t));
+	read(inputFile,inputBuffer, fileStat.st_size);
+	for (int i = 0; i<fileStat.st_size; i++)
 	{
-		histogram[temp]++;
+		histogram[inputBuffer[i]]++;
 		numBytes++;
+		
 	}
 	
 	queue *histogramQueue = newQueue(768);
@@ -65,11 +76,29 @@ int main(void)
 	code s = newCode();
 	code codeTable[256];
 	buildCode(itemA, s, codeTable);
+//	uint8_t *outputBuffer = calloc(fileStat.st_size,sizeof(uint8_t));
+	bitV *outputBuffer = newVec(fileStat.st_size*8);
+	uint32_t index = 0;
+	//memcpy(outputBuffer,codeTable[inputBuffer[0]].bits,(codeTable[inputBuffer[0]].l+7)>>3);
+	for(int i = 0; i < fileStat.st_size; i++)
+	{
+		for(uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)
+		{
+			if((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))
+			{
+				setBit(outputBuffer, index + j);
+			}
+		}
+		index += codeTable[inputBuffer[i]].l;
+	}
+	
+//	printf("%ld",  index);
+//	printf("\t%ld",  (index+7)>>3);
 
-	printTree(itemA,1);
+	//printTree(itemA,1);
 	//uint8_t inputFile
 	//uint8_t buffer[8192];
-
+/*
 	bitV *vec = newVec(codeTable[112].l);
 	vec -> v = codeTable[112].bits;	
 	bitV *testVec = newVec(codeTable[102].l);
@@ -90,11 +119,24 @@ int main(void)
         {
                 printf("%u", valBit(vec,i));
         }	
+	*/
+
 	
 	int file = open("testoutput",O_CREAT | O_TRUNC | O_WRONLY,0644);
-	write(file, "\xAD\xDE\x0D\xD0", 4);
-	write(file, &numBytes, sizeof(uint64_t));
-	
+	write(file, "\x0D\xD0\xAD\xDE", 4);	//magic number
+	write(file, &numBytes, sizeof(uint64_t));	//file size
+	uint16_t huffmanTreeSize =0;
+	for (int i = 0; i < 256;i++)
+	{
+		if(histogram[i])
+		{
+			 huffmanTreeSize++;
+		}
+	}
+	write(file, &huffmanTreeSize, sizeof(uint16_t));
+	dumpTree(itemA, file);
+	write(file, outputBuffer->v, (index+7)/8);
+	free(inputBuffer);
 	close(inputFile);
 	close(file);
 	return 0;
