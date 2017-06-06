@@ -7,20 +7,20 @@
 # include "bv.h"
 # include "code.h"
 
-void append(bitV *vec, code s)
+void append(bitV *vecOne, bitV *vecTwo)
 {
-	uint32_t originalLength = vec -> l;
-	vec -> l = s.l + vec->l;
-        vec ->v = realloc(vec ->v, sizeof(uint8_t)*((vec->l/8)+1));
-	uint32_t counter = 32;
+	uint32_t originalLength = vecOne -> l;
+	vecOne -> l = vecOne -> l + vecTwo -> l;
+	vecOne ->v = realloc(vecOne ->v, sizeof(uint8_t)*((vecOne->l/4)+1));
+	uint32_t counter = 0;
 
-	for (uint32_t i = originalLength; i < vec -> l; i++) 
+	for (uint32_t i = originalLength; i < vecOne -> l; i++) 
 	{
-		setBit(vec, i)s.bits[counter];
-		counter--; 
+		vecOne -> v[i] = vecTwo -> v[counter];
+		counter++;
 	}
-
-//	(vec -> v) |= (0x0 | s.bits);
+	
+	delVec(vecTwo);
 }
 
 int main(void)
@@ -61,39 +61,35 @@ int main(void)
 		enqueue(histogramQueue,join(itemA, itemB));
 	
 	}
-//	printTree(itemA,10);
+
 	code s = newCode();
 	code codeTable[256];
 	buildCode(itemA, s, codeTable);
-	printCode(&codeTable[122]);
+
 	printTree(itemA,1);
 	//uint8_t inputFile
 	//uint8_t buffer[8192];
-	bitV *test = newVec(5);
-	for (uint32_t i = 0; i < test -> l; i++)
-	{
-		printf("%u", valBit(test,i));
-	}
-	printf("\n");
-	printCode(&codeTable[122]);
-	append(test, codeTable[122]);
+
+	bitV *vec = newVec(codeTable[112].l);
+	vec -> v = codeTable[112].bits;	
+	bitV *testVec = newVec(codeTable[102].l);
+	testVec -> v = codeTable[102].bits;
 	
-	for (uint32_t i = 0; i < test -> l; i++)
+	for (uint32_t i = 0; i < vec -> l; i++)
         {
-                printf("%u", valBit(test,i));
+                printf("%u", valBit(vec,i));
         }
-        printf("\n");
-	//code t = newCode();
-	//t -> bits = {0,0,1};
-	//t.l = 3;
-	//test->l = t.l+test->l;
-	//test ->v =realloc(test ->v, sizeof(uint8_t)*((test->l/8)+1));
-	for(uint32_t i = 0; i < numBytes; i++ )
-	{
-		
-	}
-	
-	
+	printf("\n");
+	for (uint32_t i = 0; i < testVec -> l; i++)
+        {
+                printf("%u", valBit(testVec,i));
+        }
+        printf("\n");	
+//	append(vec, testVec);
+	for (uint32_t i = 0; i < vec -> l; i++)
+        {
+                printf("%u", valBit(vec,i));
+        }	
 	
 	int file = open("testoutput",O_CREAT | O_TRUNC | O_WRONLY,0644);
 	write(file, "\xAD\xDE\x0D\xD0", 4);

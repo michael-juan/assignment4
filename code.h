@@ -63,13 +63,6 @@ static inline uint8_t valCode(code *val, uint32_t k)  /* the value of the bit in
 {
         return (val -> bits[k>>3] >> (k%8)) & (0x1);
 }
-static inline void printCode(code *s)
-{
-	for(uint32_t i =0; i < s->l% 8; i++)
-	{
-		printf("%x ",s->bits[i]);
-	}
-	printf("\t%d\n", s->l);
-}
+
 
 # endif
