@@ -28,22 +28,22 @@ int main(int argc, char **argv)
 			
 		switch (c)
 		{
-			case 'i':
+			case 'i':	//specifies input file
 			{
 				inputFile = open(optarg, O_RDONLY);
 				break;
 			}
-			case 'o':
+			case 'o':	//specifies outputFile
 			{
 				outputFile = open(optarg,O_CREAT | O_TRUNC | O_WRONLY,0644);
 				break;
 			}
-			case 'v':
+			case 'v':	//verbose mode
 			{
 				verboseFlag = 1;
 				break;
 			}
-			case 'p':
+			case 'p':	// print tree mode
 			{
 				printTreeFlag = 1;
 				break;
@@ -131,18 +131,18 @@ int main(int argc, char **argv)
 			 huffmanTreeSize++;
 		}
 	}
-
-	huffmanTreeSize = (huffmanTreeSize*3) - 1;	//from professor's post on piazza
-	write(outputFile, &huffmanTreeSize, sizeof(uint16_t));
+	
+	uint16_t leaves = (huffmanTreeSize*3) - 1;	//from professor's post on piazza 
+	write(outputFile, &leaves, sizeof(uint16_t));	//writes huffman tree size
 	dumpTree(itemA, outputFile);
-	write(outputFile, outputBuffer->v, (index+7)/8);	//
+	write(outputFile, outputBuffer->v, (index+7)/8);	//number of  bytes in the encoded file
 	if(printTreeFlag)	//checks printTreeFlag
 	{
 		printTree(itemA,1);
 	}
 	if(verboseFlag)	//checks verboseFlag
 	{
-		printf("\ntree size: %d	compression ratio: (%f%%)",huffmanTreeSize,( (float) index / ((float) fileStat.st_size*8) )*100);
+		printf("\nOriginal %ld bits: leaves %d (%d bytes) encoding %d bits (%.4f%%)\n.",fileStat.st_size*8,leaves, huffmanTreeSize,index,( (float) index / ((float) fileStat.st_size*8) )*100);
 	}
 	
 	//free allocated memory
