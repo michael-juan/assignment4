@@ -3,8 +3,8 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <sys/types.h>
-# include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 # include "huffman.h"
 # include "queue.h"
 # include "bv.h"
@@ -15,10 +15,17 @@ int main(int argc, char **argv)
 
 	int inputFile = 0;
 	int outputFile = 1;
+	uint8_t printTreeFlag = 0;
+	uint8_t verboseFlag = 0;
 	int c = 0;
-	
+	if (argc == 1)	// if no arguments are passed in print error message
+	{
+		printf("error specify an input file\n");
+		return 1;
+	}
 	while ((c = getopt(argc, argv, "i:o:vp")) != -1)	//reused structure from assignment3
 	{
+			
 		switch (c)
 		{
 			case 'i':
@@ -33,90 +40,91 @@ int main(int argc, char **argv)
 			}
 			case 'v':
 			{
+				verboseFlag = 1;
 				break;
 			}
 			case 'p':
 			{
+				printTreeFlag = 1;
 				break;
 			}
-			default:
+			default :
 			{
-				inputFile = 0;
-				outputFile = 1;
 				break;
 			}
+
 		}
 	}
 	
 	struct stat fileStat;	//http://codewiki.wikidot.com/c:system-calls:fstat
 
-	if (fstat(inputFile,&fileStat) < 0)  
+	if (fstat(inputFile,&fileStat) < 0)  //if fstat fails print error message
 	{
+		printf("fstat error");
 		return 1;
 	}
 	
-	uint32_t histogram[256];	//change to memset
-	memset(histogram, 0x0, 256);
-	histogram[0] = 0x01;
-	histogram[255] = 0x01;
-	
-	uint64_t numBytes = 0;
-	uint8_t *inputBuffer = calloc(fileStat.st_size, sizeof(uint8_t));
-	read(inputFile,inputBuffer, fileStat.st_size);
-	`
-	for (int i = 0; i < fileStat.st_size; i++)
+	uint32_t histogram[256];	//histogram for frequency of each byte
+	memset(histogram, 0x0, sizeof(histogram));	//initialize histogram to all zeros
+	histogram[0] = 0x01;	//sets histogram[0] to 1 to prevent empty tree
+	histogram[255] = 0x01;	//sets histogram[0] to 1 to prevent empty tree
+	uint8_t *inputBuffer = calloc(fileStat.st_size, sizeof(uint8_t));	//creates an input buffer for reading in the file
+	read(inputFile,inputBuffer, fileStat.st_size);	//reads file into input buffer
+	for (int i = 0; i<fileStat.st_size; i++)	//iterates through file and increments numbytes corresponding element of input Buffer
 	{
 		histogram[inputBuffer[i]]++;
-		numBytes++;	
+		
 	}
 	
-	queue *histogramQueue = newQueue(768);
+	queue *histogramQueue = newQueue(768);	//queue for creation of huffman tree, 768 recommended by jurik
 	
-	for (uint16_t i = 0; i < 256; i++)
+	for (uint16_t i = 0; i < 256; i++)	//iterates through every byte combination
 	{
-		if (histogram[i])
+		if (histogram[i])	//if present in histogram enqueue a newNode
 		{
 			enqueue(histogramQueue, newNode(i, 1, histogram[i]));
 		}
 	}
-	
 	treeNode *itemA = NIL;
 	treeNode *itemB = NIL;
 	
-	while (empty(histogramQueue) == 0 )
+	// creating a huffman tree
+	while(empty(histogramQueue) == 0 )	//while the queue is not empty
 	{
-		dequeue(histogramQueue, &itemA);
-		if (empty(histogramQueue))
+		dequeue(histogramQueue, &itemA);	//dequeue an item
+		if(empty(histogramQueue))	// if empty, break
 		{
 			break;
 		}
-		dequeue(histogramQueue, &itemB);
-		enqueue(histogramQueue,join(itemA, itemB));
+		dequeue(histogramQueue, &itemB);	//dequeue another item 
+		enqueue(histogramQueue,join(itemA, itemB));	//enqueue the two dequeued item 
+	
 	}
-
+	// create a code table
 	code s = newCode();
 	code codeTable[256];
 	buildCode(itemA, s, codeTable);
 	
+	//outputBuffer
 	bitV *outputBuffer = newVec(fileStat.st_size*8);
 	uint32_t index = 0;
 
-	for (int i = 0; i < fileStat.st_size; i++) 
+	for(int i = 0; i < fileStat.st_size; i++)	//iterate through the file size
 	{
-		for (uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)
+		for(uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)	//reused code from bv.c, iterates through code array
 		{
-			if ((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))
+			if((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))	//if code the value is 1 in the code table
 			{
-				setBit(outputBuffer, index + j);
+				setBit(outputBuffer, index + j);	//append the corresponding bit
 			}
 		}
-		index += codeTable[inputBuffer[i]].l;
+		index += codeTable[inputBuffer[i]].l;	//increase the index by the bits added
 	}
-	
+
 	write(outputFile, "\x0D\xD0\xAD\xDE", 4);	//magic number
-	write(outputFile, &numBytes, sizeof(uint64_t));	//file size
-	uint16_t huffmanTreeSize = 0;
-	for (int i = 0; i < 256; i++)
+	write(outputFile, &fileStat.st_size, sizeof(uint64_t));	//file size
+	uint16_t huffmanTreeSize = 0;	
+	for (int i = 0; i < 256;i++)	//iterates from 0 to 256 if value is present in histogram then iterate huffmanTreeSize
 	{
 		if (histogram[i])
 		{
@@ -124,19 +132,26 @@ int main(int argc, char **argv)
 		}
 	}
 
-	huffmanTreeSize = (huffmanTreeSize*3) - 1;
+	huffmanTreeSize = (huffmanTreeSize*3) - 1;	//from professor's post on piazza
 	write(outputFile, &huffmanTreeSize, sizeof(uint16_t));
 	dumpTree(itemA, outputFile);
-	write(outputFile, outputBuffer->v, (index+7)/8);
+	write(outputFile, outputBuffer->v, (index+7)/8);	//
+	if(printTreeFlag)	//checks printTreeFlag
+	{
+		printTree(itemA,1);
+	}
+	if(verboseFlag)	//checks verboseFlag
+	{
+		printf("\ntree size: %d	compression ratio: (%f%%)",huffmanTreeSize,( (float) index / ((float) fileStat.st_size*8) )*100);
+	}
 	
-	
-	delVec(outputBuffer);
-	delTree(itemA);
+	//free allocated memory
 	delQueue(histogramQueue);
+	delTree(itemA);
+	delVec(outputBuffer);
 	free(inputBuffer);
-
 	close(inputFile);
 	close(outputFile);
 
-	return 0; 
+	return 0;
 }
