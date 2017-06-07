@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 			}
 			case 'o':	//specifies outputFile
 			{
-				outputFile = open(optarg,O_CREAT | O_TRUNC | O_WRONLY,0644);
+				outputFile = open(optarg,O_CREAT | O_EXCL | O_WRONLY,0644);
 				break;
 			}
 			case 'v':	//verbose mode
@@ -55,7 +55,17 @@ int main(int argc, char **argv)
 
 		}
 	}
+	if (inputFile == -1)
+	{
+		printf(" error input file not found\n");
+		return 1;
+	}
 	
+	if (outputFile == -1)
+	{
+		printf("error output file already exists\n");
+		return 1;
+	}
 	struct stat fileStat;	//http://codewiki.wikidot.com/c:system-calls:fstat
 
 	if (fstat(inputFile,&fileStat) < 0)  //if fstat fails print error message
