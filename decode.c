@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 			}
 			case 'o':
 			{
-				fdOut = open(optarg, O_CREAT | O_TRUNC | O_WRONLY, 0644);  /* output file is created if it does not already exist */
+				fdOut = open(optarg, O_CREAT | O_EXCL | O_WRONLY, 0644);  /* output file is created if it does not already exist */
 				break;
 			}
 			case 'v':
@@ -55,6 +55,12 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	
+	if (fdOut == -1)
+	{
+		printf("Output file already exists\n");
+		return 1;
+	}
+
 	uint32_t magicNum = 0;   /* value for the magic number */
 
 	read(fd, &magicNum, 4);
