@@ -5,6 +5,7 @@
 # define _BVector
 # include <stdint.h>
 
+/* Copied and pasted this implementation from assignment 1 */
 typedef struct bitV {
 	uint8_t *v;
 	uint32_t l;

@@ -3,6 +3,9 @@
 # include <stdint.h>
 # include <stdio.h>
 # include <stdbool.h>
+
+/* this is the implementation for each code of the corresponding symbol in the tree. I did not write this code. This was given by the Assignment 4 PDF */
+
 typedef struct code
 {
 	uint8_t bits [32];

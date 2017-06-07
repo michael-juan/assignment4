@@ -6,6 +6,8 @@
 
 /*
  * The following code defines all the functions within the header file "bv.h". 
+ *
+ * I copied and pasted this implementation from the assignment 1 pdf.
  */
 bitV *newVec(uint32_t length)
 {
