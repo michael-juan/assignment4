@@ -3,8 +3,8 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include "huffman.h"
 # include "queue.h"
 # include "bv.h"
@@ -89,10 +89,10 @@ int main(int argc, char **argv)
 	treeNode *itemB = NIL;
 	
 	// creating a huffman tree
-	while(empty(histogramQueue) == 0 )	//while the queue is not empty
+	while (empty(histogramQueue) == 0 )	//while the queue is not empty
 	{
 		dequeue(histogramQueue, &itemA);	//dequeue an item
-		if(empty(histogramQueue))	// if empty, break
+		if (empty(histogramQueue))	// if empty, break
 		{
 			break;
 		}
@@ -109,11 +109,11 @@ int main(int argc, char **argv)
 	bitV *outputBuffer = newVec(fileStat.st_size*8);
 	uint32_t index = 0;
 
-	for(int i = 0; i < fileStat.st_size; i++)	//iterate through the file size
+	for (int i = 0; i < fileStat.st_size; i++)	//iterate through the file size
 	{
-		for(uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)	//reused code from bv.c, iterates through code array
+		for (uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)	//reused code from bv.c, iterates through code array
 		{
-			if((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))	//if code the value is 1 in the code table
+			if ((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))	//if code the value is 1 in the code table
 			{
 				setBit(outputBuffer, index + j);	//append the corresponding bit
 			}
@@ -132,24 +132,24 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	uint16_t leaves = (huffmanTreeSize*3) - 1;	//from professor's post on piazza 
-	write(outputFile, &leaves, sizeof(uint16_t));	//writes huffman tree size
+	uint16_t treeSize = (huffmanTreeSize*3) - 1;	//from professor's post on piazza 
+	write(outputFile, &treeSize, sizeof(uint16_t));	//writes huffman tree size
 	dumpTree(itemA, outputFile);
 	write(outputFile, outputBuffer->v, (index+7)/8);	//number of  bytes in the encoded file
-	if(printTreeFlag)	//checks printTreeFlag
+	if (verboseFlag)	//checks verboseFlag
 	{
-		printTree(itemA,1);
+		printf("Original %ld bits: leaves %d (%d bytes) encoding %d bits (%.4f%%).\n",fileStat.st_size*8,huffmanTreeSize, treeSize,index,( (float) index / ((float) fileStat.st_size*8) )*100);
 	}
-	if(verboseFlag)	//checks verboseFlag
-	{
-		printf("\nOriginal %ld bits: leaves %d (%d bytes) encoding %d bits (%.4f%%)\n.",fileStat.st_size*8,leaves, huffmanTreeSize,index,( (float) index / ((float) fileStat.st_size*8) )*100);
-	}
-	
+	if (printTreeFlag)      //checks printTreeFlag
+        {
+                printTree(itemA,1);
+        }	
 	//free allocated memory
 	delQueue(histogramQueue);
 	delTree(itemA);
 	delVec(outputBuffer);
 	free(inputBuffer);
+	
 	close(inputFile);
 	close(outputFile);
 

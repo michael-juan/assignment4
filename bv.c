@@ -1,8 +1,8 @@
-#include "bv.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+# include "bv.h"
+# include <string.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <stdint.h>
 
 /*
  * The following code defines all the functions within the header file "bv.h". 
@@ -24,11 +24,13 @@ void delVec(bitV *deleteVec)
 	free(deleteVec); /* first the bits are freed, then the memory allocated for the bit vector is freed */
 	return;
 }
+
 void clrBit(bitV *vec, uint32_t k) /* k is the index of the bit which is to be cleared */
 {
 	(vec ->v[k >> 3]) &= ((0x1 << (k%8)) ^ (0xFF));  /* This sets the specified bit in the bit vector to 0. */
 	return;
 }
+
 void oneVec(bitV *oneVec) /* This will set a specied bit vector to 1 for all values */
 {
 	for(uint32_t i = 0; i < (((oneVec ->l)/8)+1); i++) /* for loop traverse through each byte */

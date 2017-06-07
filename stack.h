@@ -4,6 +4,8 @@
 # include <stdbool.h>
 # include "huffman.h"
 
+/* this is the header file for the stack data structure, and it was provided by the assignment 4 pdf */
+
 typedef treeNode *item; 
 
 typedef struct stack

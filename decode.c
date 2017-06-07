@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
 	if (fd == -1)
 	{
-		printf("File Not Found");    /* prints an error message if the file was not found */
+		printf("File Not Found\n");    /* prints an error message if the file was not found */
 		return 1;
 	}
 	
@@ -83,6 +83,8 @@ int main(int argc, char **argv)
 	
 /* This loop was suggested by Arjun Govindjee at his TA office hours on Friday June 2nd, where he went over the loop for reading the encoded file and printing it out */
 /* Therefore, some aspects of the following loop were innfluenced by his pseudocode that day */
+/* Instead of implementing step tree within the huffman.c file, I simply used the step Tree code below within the loop. I then deleted the function
+ * declaration from huffman.h and huffman.c */
 
 	while (bytesDecoded < fileSize)  /* runs until bytesDecoded is equal to File Size, so as to not emit extraneous symbols */
 	{
