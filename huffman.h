@@ -9,6 +9,9 @@
 # define NIL ( void *) 0
 # endif
 
+
+/* header file for huffman.c, as given on page 4 of the Assigmnent pdf */
+
 typedef struct DAH treeNode;
 
 struct DAH
@@ -54,12 +57,6 @@ static inline int8_t compare (treeNode *l, treeNode *r)
 
 treeNode * join (treeNode *l, treeNode *r); // Join two subtrees
 
-
-
 void printTree(treeNode *t, int depth);
 
 # endif
-
-//notes 
-// if code is 1 or 0 1 is left 0 is right other is the thingy
-// test code from piazza professor
