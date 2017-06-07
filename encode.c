@@ -76,8 +76,8 @@ int main(int argc, char **argv)
 			enqueue(histogramQueue, newNode(i, 1, histogram[i]));
 		}
 	}
-	treeNode *itemA = newNode('$', 0, 0);
-	treeNode *itemB = newNode('$', 0, 0);
+	treeNode *itemA = NIL;
+	treeNode *itemB = NIL;
 	
 	while(empty(histogramQueue) == 0 )
 	{
