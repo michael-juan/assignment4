@@ -3,8 +3,8 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include "huffman.h"
 # include "queue.h"
 # include "bv.h"
@@ -16,6 +16,7 @@ int main(int argc, char **argv)
 	int inputFile = 0;
 	int outputFile = 1;
 	int c = 0;
+	
 	while ((c = getopt(argc, argv, "i:o:vp")) != -1)	//reused structure from assignment3
 	{
 		switch (c)
@@ -49,22 +50,24 @@ int main(int argc, char **argv)
 	
 	struct stat fileStat;	//http://codewiki.wikidot.com/c:system-calls:fstat
 
-	if(fstat(inputFile,&fileStat) < 0)  
+	if (fstat(inputFile,&fileStat) < 0)  
 	{
 		return 1;
 	}
 	
-	static uint32_t histogram[256];	//change to memset
+	uint32_t histogram[256];	//change to memset
+	memset(histogram, 0x0, 256);
 	histogram[0] = 0x01;
 	histogram[255] = 0x01;
+	
 	uint64_t numBytes = 0;
 	uint8_t *inputBuffer = calloc(fileStat.st_size, sizeof(uint8_t));
 	read(inputFile,inputBuffer, fileStat.st_size);
-	for (int i = 0; i<fileStat.st_size; i++)
+	`
+	for (int i = 0; i < fileStat.st_size; i++)
 	{
 		histogram[inputBuffer[i]]++;
-		numBytes++;
-		
+		numBytes++;	
 	}
 	
 	queue *histogramQueue = newQueue(768);
@@ -76,19 +79,19 @@ int main(int argc, char **argv)
 			enqueue(histogramQueue, newNode(i, 1, histogram[i]));
 		}
 	}
+	
 	treeNode *itemA = NIL;
 	treeNode *itemB = NIL;
 	
-	while(empty(histogramQueue) == 0 )
+	while (empty(histogramQueue) == 0 )
 	{
 		dequeue(histogramQueue, &itemA);
-		if(empty(histogramQueue))
+		if (empty(histogramQueue))
 		{
 			break;
 		}
 		dequeue(histogramQueue, &itemB);
 		enqueue(histogramQueue,join(itemA, itemB));
-	
 	}
 
 	code s = newCode();
@@ -98,11 +101,11 @@ int main(int argc, char **argv)
 	bitV *outputBuffer = newVec(fileStat.st_size*8);
 	uint32_t index = 0;
 
-	for(int i = 0; i < fileStat.st_size; i++)
+	for (int i = 0; i < fileStat.st_size; i++) 
 	{
-		for(uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)
+		for (uint32_t j = 0; j < codeTable[inputBuffer[i]].l;j++)
 		{
-			if((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))
+			if ((codeTable[inputBuffer[i]].bits[j>>3] >> (j%8)) & (0x1))
 			{
 				setBit(outputBuffer, index + j);
 			}
@@ -110,12 +113,10 @@ int main(int argc, char **argv)
 		index += codeTable[inputBuffer[i]].l;
 	}
 	
-	
-//	int file = open("testoutput",O_CREAT | O_TRUNC | O_WRONLY,0644);
 	write(outputFile, "\x0D\xD0\xAD\xDE", 4);	//magic number
 	write(outputFile, &numBytes, sizeof(uint64_t));	//file size
 	uint16_t huffmanTreeSize = 0;
-	for (int i = 0; i < 256;i++)
+	for (int i = 0; i < 256; i++)
 	{
 		if (histogram[i])
 		{
@@ -128,13 +129,14 @@ int main(int argc, char **argv)
 	dumpTree(itemA, outputFile);
 	write(outputFile, outputBuffer->v, (index+7)/8);
 	
-	delQueue(histogramQueue);
-	delTree(itemA);
 	
 	delVec(outputBuffer);
+	delTree(itemA);
+	delQueue(histogramQueue);
 	free(inputBuffer);
+
 	close(inputFile);
 	close(outputFile);
 
-	return 0;
+	return 0; 
 }

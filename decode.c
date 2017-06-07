@@ -1,12 +1,12 @@
 # include <fcntl.h>
 # include <stdio.h>
-# include "huffman.h"
-# include "code.h"
 # include <stdint.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
 # include <ctype.h>
+# include "huffman.h"
+# include "code.h"
 # include "bv.h"
 
 
@@ -22,11 +22,6 @@ int main(int argc, char **argv)
 			case 'i':
 			{
 				fd = open(optarg, O_RDONLY);
-				if (fd == 0)
-				{
-					printf("Please specify an input file");
-					return 0;
-				}
 				break;
 			}
 			case 'o':
@@ -60,7 +55,7 @@ int main(int argc, char **argv)
 	if (magicNum != 0xdeadd00d)
 	{
 		printf("Not a compressed file\n");
-		return 0;
+		return -1;
 	}	
 	
 	uint16_t treeSize = 0;
@@ -121,10 +116,10 @@ int main(int argc, char **argv)
 	} 
 
 	free(buf);
-	close(fd);
 	free(savedTree);
 	delTree(tree);
 
-
+	close(fd);
+	close(fdOut);
 	return 0;
 }
